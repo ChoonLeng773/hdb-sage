@@ -14,7 +14,6 @@ which adds metadata and stores the processed data in a vector database.
 import json
 import re
 import time
-
 from urllib.parse import urljoin
 from pathlib import Path
 from bs4 import BeautifulSoup
@@ -25,34 +24,21 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
 from webdriver_manager.chrome import ChromeDriverManager
+
+from config import Config
 
 # -----------------------------
 # Config variables
 # -----------------------------
-
-# To segment out this portion onto a config file
-
 # URLs
-BASE_URL = "https://www.hdb.gov.sg"
-START_URL = "https://www.hdb.gov.sg/buying-a-flat/flat-grant-and-loan-eligibility/application-for-an-hdb-flat-eligibility-hfe-letter"
-
-# -----------------------------
-# Selectors -> once developed, move into config file
-# -----------------------------
-# get_childpage_urls
-NAV_SELECTOR = "nav.PSidebar.DestinationLayout_DestinationPageLayout__PSidebar__Z_Yym"
-# scrape data
-PAGE_LOAD_SELECTOR = "img.hdb__logo"
-# (0, n) within each child page -> move these variables into the chunker
-CAT_SELECTOR = "div.accordion-header"
-DATA_SELECTOR = "div.AccordionWrapper_accordionCollapse__wyfTM"
-
-OVERVIEW_SELECTOR = "div.BodyContent_BodyContent__xr2hZ"
-DROPDOWN_SELECTOR = (
-    "div.PAccordion.accordion.accordion-flush.AccordionWrapper_Accordion__ywOd_"
-)
+BASE_URL = Config.BASE_URL
+START_URL = Config.START_URL
+# Selectors
+NAV_SELECTOR = Config.NAV_SELECTOR
+PAGE_LOAD_SELECTOR = Config.PAGE_LOAD_SELECTOR
+OVERVIEW_SELECTOR = Config.OVERVIEW_SELECTOR
+DROPDOWN_SELECTOR = Config.DROPDOWN_SELECTOR
 
 
 # -----------------------------
