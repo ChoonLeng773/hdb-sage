@@ -51,7 +51,7 @@ DATA_SELECTOR = "div.AccordionWrapper_accordionCollapse__wyfTM"
 
 OVERVIEW_SELECTOR = "div.BodyContent_BodyContent__xr2hZ"
 DROPDOWN_SELECTOR = (
-    "div.PAccordion accordion accordion-flush AccordionWrapper_Accordion__ywOd_"
+    "div.PAccordion.accordion.accordion-flush.AccordionWrapper_Accordion__ywOd_"
 )
 
 
@@ -144,9 +144,8 @@ def scrape_childpage(driver, buyer_category: str, url: str) -> dict[str, str]:
         data["url"] = url  # only include if overview is found
         data["category"] = buyer_category
     if dropdown_content:
-        data["dropdown"] = dropdown_content[0].get_text(
-            strip=True
-        )  # should only have 1 container
+        # this needs to be saved as a html for hierarchal chunking
+        data["dropdown"] = str(dropdown_content[0])  # should only have 1 container
 
     return data
 
@@ -179,10 +178,10 @@ def save_json(title: str, data: dict[str, str]):
 
     filepath = output_dir / filename
 
-    with open(filepath, "w", encoding="utf-8") as f:
+    with open(filepath, "w", encoding="utf-8") as f:  # overwrites existing files
         json.dump(data, f, indent=2, ensure_ascii=False)
 
-    print(f"Saved: {filename}")  # filepath to check
+    # print(f"Saved: {filename}")  # filepath to check
 
 
 # -----------------------------
