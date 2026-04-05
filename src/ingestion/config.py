@@ -22,10 +22,10 @@ class Config:
         "nav.PSidebar.DestinationLayout_DestinationPageLayout__PSidebar__Z_Yym"
     )
     PAGE_LOAD_SELECTOR = "img.hdb__logo"
-    OVERVIEW_SELECTOR = "div.BodyContent_BodyContent__xr2hZ"
-    DROPDOWN_SELECTOR = (
-        "div.PAccordion.accordion.accordion-flush.AccordionWrapper_Accordion__ywOd_"
-    )
+    INFO_SELECTOR = "div.DestinationLayout_DestinationPageLayout__Cont__5NdTz.col-md-8.col-sm-12.offset-md-1"  # parent selector
+
     # Chunking Selectors
-    CAT_SELECTOR = "div.accordion-header"  # (0, n) within each child page
-    DATA_SELECTOR = "div.AccordionWrapper_accordionCollapse__wyfTM"
+    OVERVIEW_SELECTOR = "div.BodyContent_BodyContent__xr2hZ"  # child of INFO
+    DROPDOWN_SELECTOR = "div.PAccordion.accordion.accordion-flush.AccordionWrapper_Accordion__ywOd_"  # child of INFO
+    CAT_SELECTOR = "div.accordion-header"  # Child of DROPDOWN, has between (0, n) within each child page.
+    DATA_SELECTOR = "div.AccordionWrapper_accordionCollapse__wyfTM"  # Child of DROPDOWN
