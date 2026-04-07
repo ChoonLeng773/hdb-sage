@@ -47,6 +47,7 @@ from src.ingestion.utils import save_data
 OVERVIEW_SELECTOR = Config.OVERVIEW_SELECTOR
 SUBSECTION_SELECTOR = Config.SUBSECTION_SELECTOR
 CHUNKER_OUT_DIR = Config.CHUNKER_OUT_DIR
+SCRAPER_OUT_DIR = Config.SCRAPER_OUT_DIR
 
 
 # -------------------------------------------------------------------------------------------------
@@ -267,7 +268,7 @@ def generate_chunks() -> list[dict[str, str]]:
     prefix = "dc"  # data chunk
     chunk_counter = 1
     project_root = Path(__file__).resolve().parents[2]
-    data_directory = project_root / "data" / "raw"
+    data_directory = project_root / SCRAPER_OUT_DIR
     website_pages = get_raw_data(data_directory)
     for page_dict in website_pages:
         html_data = page_dict["data"]
