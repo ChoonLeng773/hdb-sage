@@ -46,7 +46,7 @@ from config import Config
 
 
 OVERVIEW_SELECTOR = Config.OVERVIEW_SELECTOR
-SUBSECTION_SELECTOR = "div.accordion-item.m-0"
+SUBSECTION_SELECTOR = Config.SUBSECTION_SELECTOR
 
 
 # -------------------------------------------------------------------------------------------------
