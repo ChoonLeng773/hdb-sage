@@ -27,6 +27,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 
 from config import Config
+from src.ingestion.utils import save_data
 
 # -----------------------------
 # Config variables
@@ -38,6 +39,8 @@ START_URL = Config.START_URL
 NAV_SELECTOR = Config.NAV_SELECTOR
 PAGE_LOAD_SELECTOR = Config.PAGE_LOAD_SELECTOR
 INFO_SELECTOR = Config.INFO_SELECTOR
+# file path
+SCRAPER_OUT_DIR = Config.SCRAPER_OUT_DIR
 
 
 # -----------------------------
@@ -132,41 +135,6 @@ def scrape_childpage(driver, buyer_category: str, url: str) -> dict[str, str]:
 
 
 # -----------------------------
-# Save Function
-# -----------------------------
-def sanitize_filename(name: str) -> str:
-    """
-    Lowers casing for file naming
-    Removes weird characters which can cause issues for saving the file
-    replaces spacing with underscore
-    """
-    name = name.strip().lower()
-    name = re.sub(r"[^\w\s-]", "", name)
-    name = re.sub(r"[\s]+", "_", name)
-    return name
-
-
-def save_json(title: str, data: dict[str, str]):
-    """
-    Takes the name of the section as well as the dictionary
-    Creates the json file containing {subsections : html}
-    Saved to ~/data/raw to be chunked
-    """
-    filename = sanitize_filename(title) + ".json"
-    project_root = Path(__file__).resolve().parents[2]
-    output_dir = project_root / "data" / "raw"
-    output_dir.mkdir(parents=True, exist_ok=True)
-
-    filepath = output_dir / filename
-    if data:
-        # only save if there is info to be scraped
-        with open(filepath, "w", encoding="utf-8") as f:  # overwrites existing files
-            json.dump(data, f, indent=2, ensure_ascii=False)
-
-    # print(f"Saved: {filename}")  # filepath to check
-
-
-# -----------------------------
 # Run pipeline
 # -----------------------------
 
@@ -191,8 +159,9 @@ def load_hdb_data():
         print(f"Found {len(links)} links")
 
         for buyer_category, url in links:
+            # using buyer_category as files name -> there is a slight bug (todo)
             data = scrape_childpage(driver, buyer_category, url)
-            save_json(buyer_category, data)
+            save_data(SCRAPER_OUT_DIR, buyer_category, data)
             time.sleep(2)
 
     finally:

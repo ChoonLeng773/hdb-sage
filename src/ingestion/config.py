@@ -32,3 +32,6 @@ class Config:
     CAT_SELECTOR = "div.accordion-header"  # (0, n) within each child page
     DATA_SELECTOR = "div.AccordionWrapper_accordionCollapse__wyfTM"
     SUBSECTION_SELECTOR = "div.accordion-item.m-0"
+    # Directory Vectors
+    CHUNKER_OUT_DIR = "data/chunks"
+    SCRAPER_OUT_DIR = "data/raw"

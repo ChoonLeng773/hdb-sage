@@ -43,10 +43,11 @@ from bs4 import BeautifulSoup, Tag
 from bs4.element import NavigableString
 
 from config import Config
-
+from src.ingestion.utils import save_data
 
 OVERVIEW_SELECTOR = Config.OVERVIEW_SELECTOR
 SUBSECTION_SELECTOR = Config.SUBSECTION_SELECTOR
+CHUNKER_OUT_DIR = Config.CHUNKER_OUT_DIR
 
 
 # -------------------------------------------------------------------------------------------------
@@ -102,46 +103,6 @@ def test_get_raw_data() -> dict[str, str]:
 
 
 # test_get_raw_data()
-
-
-def sanitize_filename(name: str) -> str:
-    """
-    Lowers casing for file naming
-    Removes weird characters which can cause issues for saving the file
-    replaces spacing with underscore
-    """
-    name = name.strip().lower()
-    name = re.sub(r"[^\w\s-]", "", name)
-    name = re.sub(r"[\s]+", "_", name)
-    return name
-
-
-def save_data(chunk_id: str, category: str, data: dict[str, str]):
-    """
-    Takes the name of the section as well as the dictionary
-    Creates the json file containing {subsections : html}
-    Saved to ~/data/raw to be chunked
-    """
-    filename = sanitize_filename(f"{chunk_id}_{category}") + ".json"
-    project_root = Path(__file__).resolve().parents[2]
-    output_dir = project_root / "data" / "chunks"
-    output_dir.mkdir(parents=True, exist_ok=True)
-
-    filepath = output_dir / filename
-
-    with open(filepath, "w", encoding="utf-8") as f:  # overwrites existing files
-        json.dump(data, f, indent=2, ensure_ascii=False)
-
-
-# def save_data(output_dir: str, file_name: str):
-#     # Save to processed directory with same filename
-#     output_file = output_dir / file_name
-#     with open(output_file, "w", encoding="utf-8") as f:
-#         json.dump(output_data, f, ensure_ascii=False, indent=2)
-
-#     print(f"[OK] Processed {file_path.name}")
-
-
 # -------------------------------------------------------------------------------------------------
 # Process HTML according to sections [brief overview, accordion extra info thingy]
 # -------------------------------------------------------------------------------------------------
@@ -327,7 +288,7 @@ def generate_chunks() -> list[dict[str, str]]:
                 "chunk_id": chunk_id,
             }
             # Save function to review
-            save_data(chunk_id, cat, output_data)
+            save_data(CHUNKER_OUT_DIR, chunk_id, output_data)
             metadata_chunks.append(output_data)
     return metadata_chunks
 
