@@ -37,8 +37,7 @@ START_URL = Config.START_URL
 # Selectors
 NAV_SELECTOR = Config.NAV_SELECTOR
 PAGE_LOAD_SELECTOR = Config.PAGE_LOAD_SELECTOR
-OVERVIEW_SELECTOR = Config.OVERVIEW_SELECTOR
-DROPDOWN_SELECTOR = Config.DROPDOWN_SELECTOR
+INFO_SELECTOR = Config.INFO_SELECTOR
 
 
 # -----------------------------
@@ -122,16 +121,12 @@ def scrape_childpage(driver, buyer_category: str, url: str) -> dict[str, str]:
     soup = BeautifulSoup(driver.page_source, "html.parser")
     data = {}
 
-    overview_content = soup.select(OVERVIEW_SELECTOR)
-    dropdown_content = soup.select(DROPDOWN_SELECTOR)
+    hdb_guide_content = soup.select(INFO_SELECTOR)
 
-    if overview_content:
-        data["overview"] = overview_content[0].get_text(strip=True)  # must only have 1
-        data["url"] = url  # only include if overview is found
+    if hdb_guide_content:
+        data["data"] = str(hdb_guide_content[0])  # only 1 per page
+        data["url"] = url
         data["category"] = buyer_category
-    if dropdown_content:
-        # this needs to be saved as a html for hierarchal chunking
-        data["dropdown"] = str(dropdown_content[0])  # should only have 1 container
 
     return data
 
@@ -163,9 +158,10 @@ def save_json(title: str, data: dict[str, str]):
     output_dir.mkdir(parents=True, exist_ok=True)
 
     filepath = output_dir / filename
-
-    with open(filepath, "w", encoding="utf-8") as f:  # overwrites existing files
-        json.dump(data, f, indent=2, ensure_ascii=False)
+    if data:
+        # only save if there is info to be scraped
+        with open(filepath, "w", encoding="utf-8") as f:  # overwrites existing files
+            json.dump(data, f, indent=2, ensure_ascii=False)
 
     # print(f"Saved: {filename}")  # filepath to check
 
