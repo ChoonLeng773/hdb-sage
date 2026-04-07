@@ -24,8 +24,14 @@ class Config:
     PAGE_LOAD_SELECTOR = "img.hdb__logo"
     INFO_SELECTOR = "div.DestinationLayout_DestinationPageLayout__Cont__5NdTz.col-md-8.col-sm-12.offset-md-1"  # parent selector
 
+    OVERVIEW_SELECTOR = "div.BodyContent_BodyContent__xr2hZ"
+    DROPDOWN_SELECTOR = (
+        "div.PAccordion.accordion.accordion-flush.AccordionWrapper_Accordion__ywOd_"
+    )
     # Chunking Selectors
-    OVERVIEW_SELECTOR = "div.BodyContent_BodyContent__xr2hZ"  # child of INFO
-    DROPDOWN_SELECTOR = "div.PAccordion.accordion.accordion-flush.AccordionWrapper_Accordion__ywOd_"  # child of INFO
-    CAT_SELECTOR = "div.accordion-header"  # Child of DROPDOWN, has between (0, n) within each child page.
-    DATA_SELECTOR = "div.AccordionWrapper_accordionCollapse__wyfTM"  # Child of DROPDOWN
+    CAT_SELECTOR = "div.accordion-header"  # (0, n) within each child page
+    DATA_SELECTOR = "div.AccordionWrapper_accordionCollapse__wyfTM"
+    SUBSECTION_SELECTOR = "div.accordion-item.m-0"
+    # Directory Vectors
+    CHUNKER_OUT_DIR = "data/chunks"
+    SCRAPER_OUT_DIR = "data/raw"
