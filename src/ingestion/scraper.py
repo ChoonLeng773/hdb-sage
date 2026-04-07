@@ -11,11 +11,8 @@ The output is designed to be consumed by a downstream chunking pipeline,
 which adds metadata and stores the processed data in a vector database.
 """
 
-import json
-import re
 import time
 from urllib.parse import urljoin
-from pathlib import Path
 from bs4 import BeautifulSoup
 
 from selenium import webdriver

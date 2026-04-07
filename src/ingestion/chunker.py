@@ -32,7 +32,6 @@ Notes
 
 """
 
-import re
 import json
 
 # import uuid # for scaling the chunks
