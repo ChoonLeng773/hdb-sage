@@ -1,7 +1,41 @@
-import os
+"""
+HTML Processing & Chunking Functionality
+======================================
+
+IN-OUT
+--------
+JSON (html, url, str) -> JSON chunks {metadata, text chunk (from html)}
+
+Steps
+--------
+The generate_chunks performs the following steps:
+1. Load raw JSON data containing {HTML, URL, and category} fields from ~/data/raw directory
+2. Parse and clean HTML content into structured plain text.
+    2.1. Segment content into logical sections:
+    - Overview (main body content)
+    - Accordion subsections (expandable sections on the page)
+    2.2. Convert HTML elements into readable text:
+    - Headings → Markdown-style headers
+    - Paragraphs → Plain text
+    - Lists → Bullet points
+    - Tables → Row-wise structured key-value text
+    2.3. Split text into smaller overlapping chunks for efficient retrieval.
+3. Attach metadata (URL, category, chunk ID) to each chunk.
+4. Save processed chunks as JSON files in ~/data/chunks.
+
+Notes
+-----
+- Assumes raw data files follow the schema:
+  { "data": "<html>", "url": "...", "category": "..." }
+- Selectors for extracting sections are defined in the Config module.
+- Chunk IDs are generated sequentially but can be replaced with UUIDs
+
+"""
+
 import re
 import json
-import uuid
+
+# import uuid # for scaling the chunks
 
 from typing import Callable
 from pathlib import Path
@@ -11,9 +45,6 @@ from bs4.element import NavigableString
 from config import Config
 
 
-CAT_SELECTOR = Config.CAT_SELECTOR
-DATA_SELECTOR = Config.DATA_SELECTOR
-# these two
 OVERVIEW_SELECTOR = Config.OVERVIEW_SELECTOR
 SUBSECTION_SELECTOR = "div.accordion-item.m-0"
 
@@ -266,7 +297,7 @@ def chunk_text(text: str, chunk_size: int = 256, overlap: int = 50) -> list[str]
 
 
 # -------------------------------------------------------------------------------------------------
-# Wrapper function to bring everything together
+# Wrapper function
 # -------------------------------------------------------------------------------------------------
 def generate_chunks() -> list[dict[str, str]]:
     """
@@ -306,11 +337,7 @@ def generate_chunks() -> list[dict[str, str]]:
 # -------------------------------------------------------------------------------------------------
 def main():
     """
-    Main entry point for the HDB data scraping pipeline.
-
-    This function initiates the scraping process by calling load_hdb_data(),
-    which scrapes eligibility information from HDB website and saves the target element
-    of each page as JSON files under ~/data/raw folder.
+    For running from python file
     """
     generate_chunks()
 
