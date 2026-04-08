@@ -21,4 +21,4 @@ __all__ = [
 ]
 
 # Optional: run code when package is imported
-print("filename package has been loaded!")
+print("Database package has been loaded!")
