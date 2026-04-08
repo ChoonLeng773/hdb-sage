@@ -1,5 +1,5 @@
 from sentence_transformers import SentenceTransformer
-from config import EMBEDDING_MODEL
+from .config import EMBEDDING_MODEL
 
 
 class Embedder:
