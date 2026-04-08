@@ -18,12 +18,13 @@ from vectorstore import *
 
 def run():
     my_embedder = Embedder()
-    my_db = VectorDatabaseSetup(persist_directory=PERSIST_DIR)
+    persist_path = Path(__file__).resolve().parents[1] / PERSIST_DIR
+    my_db = VectorDatabaseSetup(persist_directory=persist_path)
 
     hybrid = HybridSearcher(embedder=my_embedder, db=my_db)
 
     results = hybrid.search(VS_TC_1)
-    print(type(results))
+    print(results)
 
 
 if __name__ == "__main__":

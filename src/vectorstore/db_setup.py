@@ -5,7 +5,7 @@ Intended for use in embedding pipelines where documents are
 split into vectors for retrieval or search applications.
 """
 
-import numpy as np
+# import numpy as np
 import chromadb
 
 from .config import CHROMA_COLLECTION_NAME, NUM_QUERY_RESULTS
@@ -89,6 +89,8 @@ class VectorDatabaseSetup:
         """Search the database for the closest vectors. -> updated to hybrid search"""
         # query_np = np.array(query_embeddings, dtype=np.float32)
         results = self.collection.query(
-            query_embeddings=query_embeddings, n_results=n_results
+            query_embeddings=query_embeddings,
+            n_results=n_results,
+            include=["documents", "embeddings", "metadatas"],
         )
         return results

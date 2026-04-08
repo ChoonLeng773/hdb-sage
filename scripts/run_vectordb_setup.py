@@ -2,6 +2,8 @@
 This file runs the functions required to setup the vector database in ~/data/vectors
 from chunks in ~/data/raw.
 Note: It deletes all of the previous data in the vector database.
+
+Todo : include webscraping call functionality here to finish pipeline
 """
 
 import sys
@@ -31,6 +33,7 @@ def run():
 
     # Use absolute path relative to this script for persistence
     persist_path = Path(__file__).resolve().parents[1] / PERSIST_DIR
+    # print("database path = " + str(persist_path))
     persist_path.mkdir(parents=True, exist_ok=True)
     my_db = VectorDatabaseSetup(
         persist_directory=str(persist_path), reset_db=True

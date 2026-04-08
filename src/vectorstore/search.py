@@ -1,11 +1,20 @@
 """
 This file contains the HybridSearcher class that is to improve the search result accuracy for RAG.
+
+Future improvements:
+1. keyword filtering with metadata. Rationale (HDB buyers are very easily segmented, and these
+FAQs are very specific to each group, which can greatly improve query times and accuracy as the
+size of the database grows.)
+
 """
+
+from pathlib import Path
+from typing import Dict, List
 
 from .embedding import Embedder
 from .db_setup import VectorDatabaseSetup
 from .keyword_engine import KeywordEngine
-from .config import PERSIST_DIR
+from .config import PERSIST_DIR, VS_TC_1
 
 
 class HybridSearcher:
@@ -18,7 +27,9 @@ class HybridSearcher:
         self.embedder = embedder
         self.db = db
 
-    def search(self, query: str, n_results: int = 3, candidate_pool: int = 20):
+    def search(
+        self, query: str, n_results: int = 5, candidate_pool: int = 20
+    ) -> Dict[str, List[str]]:
         """
         1. Vector search to get `candidate_pool` semantically similar chunks.
         2. BM25 keyword re-rank those chunks.
@@ -39,6 +50,7 @@ class HybridSearcher:
             query_embeddings=query_vector, n_results=candidate_pool
         )
 
+        # checking if search turns up empty
         candidate_ids = vector_data["ids"][0]  # e.g. 20 IDs
         candidate_docs = vector_data["documents"][0]  # matching texts
 
@@ -58,13 +70,15 @@ class HybridSearcher:
         # 3. --- FETCH & RETURN final top-N docs ---
         final_ids = [res["id"] for res in keyword_results]
 
-        final_documents = self.db.collection.get(ids=final_ids, include=["documents"])
+        final_documents = self.db.collection.get(
+            ids=final_ids, include=["documents", "metadatas"]
+        )
 
         # Print results
-        for i, (doc_id, text) in enumerate(
-            zip(final_documents["ids"], final_documents["documents"])
-        ):
-            print(f"Rank {i+1} (ID: {doc_id[:8]}...): {text[:120]}...")
+        # for i, (doc_id, text) in enumerate(
+        #     zip(final_documents["ids"], final_documents["documents"])
+        # ):
+        #     print(f"Rank {i+1} (ID: {doc_id[:8]}...): {text[:120]}...")
 
         return final_documents
 
@@ -72,14 +86,15 @@ class HybridSearcher:
 # --- How to run it ---
 if __name__ == "__main__":
     my_embedder = Embedder()
+    persist_path = Path(__file__).resolve().parents[2] / PERSIST_DIR
     my_db = VectorDatabaseSetup(persist_directory=PERSIST_DIR)
 
     hybrid = HybridSearcher(embedder=my_embedder, db=my_db)
 
     # Try a query where a keyword might matter more than pure semantics
-    TEST_CASE = """
+    """ example tc:
         I am a fresh grad who just started working, and i would like to buy a house. What schemes
         can be helpful to me and my girlfriend?
     """
-    results = hybrid.search(TEST_CASE)
-    print(type(results))
+    results = hybrid.search(VS_TC_1)
+    print(results)
