@@ -1,9 +1,20 @@
-from embedding import Embedder
-from db_setup import VectorDatabaseSetup
-from keyword_engine import KeywordEngine
+"""
+This file contains the HybridSearcher class that is to improve the search result accuracy for RAG.
+"""
+
+from .embedding import Embedder
+from .db_setup import VectorDatabaseSetup
+from .keyword_engine import KeywordEngine
+from .config import PERSIST_DIR
 
 
 class HybridSearcher:
+    """
+    This class contains the functionality to look for the most relevant chunks using hybrid search
+    which involves both cosine similarity and keyword matching to create a better ranking for
+    retrieval
+    """
+
     def __init__(self, embedder: Embedder, db: VectorDatabaseSetup):
         self.embedder = embedder
         self.db = db
@@ -72,13 +83,20 @@ class HybridSearcher:
         ):
             print(f"Rank {i+1} (ID: {doc_id[:8]}...): {text}")
 
+        return final_documents
+
 
 # --- How to run it ---
 if __name__ == "__main__":
     my_embedder = Embedder()
-    my_db = VectorDatabaseSetup(persist_directory="./my_local_vectordb")
+    my_db = VectorDatabaseSetup(persist_directory=PERSIST_DIR)
 
     hybrid = HybridSearcher(embedder=my_embedder, db=my_db)
 
     # Try a query where a keyword might matter more than pure semantics
-    hybrid.search("Chroma application database")
+    TEST_CASE = """
+        I am a fresh grad who just started working, and i would like to buy a house. What schemes
+        can be helpful to me and my girlfriend?
+    """
+    results = hybrid.search(TEST_CASE)
+    print(type(results))

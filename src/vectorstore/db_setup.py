@@ -8,7 +8,7 @@ split into vectors for retrieval or search applications.
 import numpy as np
 import chromadb
 
-from .config import CHROMA_COLLECTION_NAME
+from .config import CHROMA_COLLECTION_NAME, NUM_QUERY_RESULTS
 
 
 class VectorDatabaseSetup:
@@ -28,7 +28,7 @@ class VectorDatabaseSetup:
 
     def __init__(
         self,
-        persist_directory: str = "./chroma_data",
+        persist_directory: str,  # required fields to prevent misbehaviouur
         collection_name: str = CHROMA_COLLECTION_NAME,
         reset_db: bool = False,  # 👈 add this flag
     ):
@@ -83,8 +83,10 @@ class VectorDatabaseSetup:
         results = self.collection.get(include=["documents"])
         return results["ids"], results["documents"]
 
-    def query_vectors(self, query_embeddings: list[list[float]], n_results: int = 2):
-        """Search the database for the closest vectors. -> update to hybrid search"""
+    def query_vectors(
+        self, query_embeddings: list[list[float]], n_results: int = NUM_QUERY_RESULTS
+    ):
+        """Search the database for the closest vectors. -> updated to hybrid search"""
         query_np = np.array(query_embeddings, dtype=np.float32)
         results = self.collection.query(query_embeddings=query_np, n_results=n_results)
         return results

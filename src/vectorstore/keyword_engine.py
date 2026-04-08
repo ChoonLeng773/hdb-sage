@@ -1,7 +1,16 @@
+"""
+This file contains the KeywordEngine class that does keyword search
+"""
+
 from rank_bm25 import BM25Okapi
 
 
 class KeywordEngine:
+    """
+    This class contains the methods to perform keyword search and generate a ranking score to
+    compare text data in the chunks retrieved from the vector store to get the most relevant data
+    """
+
     def __init__(self, documents: list[str], ids: list[str]):
         """
         Initializes the BM25 keyword search index.
