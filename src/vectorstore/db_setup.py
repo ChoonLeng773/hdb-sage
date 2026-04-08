@@ -62,19 +62,19 @@ class VectorDatabaseSetup:
             f"Inserting {len(ids)} records into Chroma collection '{self.collection_name}'..."
         )
         # type safe warning
-        allowed_types = (str, int, float, bool, type(None))
-        safe_metadatas = []
-        for md in metadatas:
-            safe_md = {k: v for k, v in md.items() if isinstance(v, allowed_types)}
-            safe_metadatas.append(safe_md)
-        # np type
-        embeddings_np = np.array(embeddings, dtype=np.float32)
+        # allowed_types = (str, int, float, bool, type(None))
+        # safe_metadatas = []
+        # for md in metadatas:
+        #     safe_md = {k: v for k, v in md.items() if isinstance(v, allowed_types)}
+        #     safe_metadatas.append(safe_md)
+        # np type -> for type safe linting
+        # embeddings_np = np.array(embeddings, dtype=np.float32)
         # Changed .add() to .upsert() to prevent adding to an ID that already exists
         self.collection.upsert(
             ids=ids,
-            embeddings=embeddings_np,
+            embeddings=embeddings,
             documents=documents,
-            metadatas=safe_metadatas,
+            metadatas=metadatas,
         )
 
     def get_all_documents(self):
@@ -87,6 +87,8 @@ class VectorDatabaseSetup:
         self, query_embeddings: list[list[float]], n_results: int = NUM_QUERY_RESULTS
     ):
         """Search the database for the closest vectors. -> updated to hybrid search"""
-        query_np = np.array(query_embeddings, dtype=np.float32)
-        results = self.collection.query(query_embeddings=query_np, n_results=n_results)
+        # query_np = np.array(query_embeddings, dtype=np.float32)
+        results = self.collection.query(
+            query_embeddings=query_embeddings, n_results=n_results
+        )
         return results

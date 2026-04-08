@@ -11,7 +11,7 @@ EMBEDDING_MODEL = "all-MiniLM-L6-v2"
 
 # Vector Database
 CHROMA_COLLECTION_NAME = "my_knowledge_base"
-NUM_QUERY_RESULTS = 5
+NUM_QUERY_RESULTS = 10
 
 # Vector Testing
 VS_TC_1 = """
