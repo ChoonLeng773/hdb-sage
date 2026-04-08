@@ -30,7 +30,7 @@ def run():
     my_embedder = Embedder()  # Defaults to all-MiniLM-L6-v2
 
     # Use absolute path relative to this script for persistence
-    persist_path = Path(__file__).resolve().parents[2] / PERSIST_DIR
+    persist_path = Path(__file__).resolve().parents[1] / PERSIST_DIR
     persist_path.mkdir(parents=True, exist_ok=True)
     my_db = VectorDatabaseSetup(
         persist_directory=str(persist_path), reset_db=True
