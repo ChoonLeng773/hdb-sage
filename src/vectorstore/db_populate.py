@@ -2,10 +2,10 @@
 import hashlib
 from pathlib import Path
 
-from embedding import Embedder
-from db_setup import VectorDatabaseSetup
-from config import PERSIST_DIR, CHUNKS_DIR
-from load_data import load_json_chunks
+from .embedding import Embedder
+from .db_setup import VectorDatabaseSetup
+from .config import PERSIST_DIR, CHUNKS_DIR
+from .load_data import load_json_chunks
 
 
 class DatabasePopulator:
@@ -50,6 +50,9 @@ class DatabasePopulator:
 
 
 def run():
+    """
+    wraps functionality of populate class
+    """
     # 1. Load data
     raw_data = load_json_chunks(CHUNKS_DIR)
     # 2. Initialize local services

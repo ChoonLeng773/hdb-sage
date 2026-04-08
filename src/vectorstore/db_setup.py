@@ -8,6 +8,8 @@ split into vectors for retrieval or search applications.
 import numpy as np
 import chromadb
 
+from .config import CHROMA_COLLECTION_NAME
+
 
 class VectorDatabaseSetup:
     """
@@ -27,15 +29,15 @@ class VectorDatabaseSetup:
     def __init__(
         self,
         persist_directory: str = "./chroma_data",
-        collection_name: str = "my_knowledge_base",
-        reset: bool = False,  # 👈 add this flag
+        collection_name: str = CHROMA_COLLECTION_NAME,
+        reset_db: bool = False,  # 👈 add this flag
     ):
         """Connect to local Chroma DB and ensure the collection exists."""
         print(f"Connecting to Chroma DB at {persist_directory}...")
         self.client = chromadb.PersistentClient(path=persist_directory)
         self.collection_name = collection_name
 
-        if reset:
+        if reset_db:
             try:
                 print(f"Resetting collection '{collection_name}'...")
                 self.client.delete_collection(name=collection_name)
