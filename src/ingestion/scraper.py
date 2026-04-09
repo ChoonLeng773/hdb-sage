@@ -23,21 +23,21 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 
-from config import Config
-from src.ingestion.utils import save_data
+from .config import IngestionConfig
+from .utils import save_data
 
 # -----------------------------
 # Config variables
 # -----------------------------
 # URLs
-BASE_URL = Config.BASE_URL
-START_URL = Config.START_URL
+BASE_URL = IngestionConfig.BASE_URL
+START_URL = IngestionConfig.START_URL
 # Selectors
-NAV_SELECTOR = Config.NAV_SELECTOR
-PAGE_LOAD_SELECTOR = Config.PAGE_LOAD_SELECTOR
-INFO_SELECTOR = Config.INFO_SELECTOR
+NAV_SELECTOR = IngestionConfig.NAV_SELECTOR
+PAGE_LOAD_SELECTOR = IngestionConfig.PAGE_LOAD_SELECTOR
+INFO_SELECTOR = IngestionConfig.INFO_SELECTOR
 # file path
-SCRAPER_OUT_DIR = Config.SCRAPER_OUT_DIR
+SCRAPER_OUT_DIR = IngestionConfig.SCRAPER_OUT_DIR
 
 
 # -----------------------------

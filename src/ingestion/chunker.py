@@ -41,13 +41,13 @@ from pathlib import Path
 from bs4 import BeautifulSoup, Tag
 from bs4.element import NavigableString
 
-from config import Config
-from src.ingestion.utils import save_data
+from .config import IngestionConfig
+from .utils import save_data
 
-OVERVIEW_SELECTOR = Config.OVERVIEW_SELECTOR
-SUBSECTION_SELECTOR = Config.SUBSECTION_SELECTOR
-CHUNKER_OUT_DIR = Config.CHUNKER_OUT_DIR
-SCRAPER_OUT_DIR = Config.SCRAPER_OUT_DIR
+OVERVIEW_SELECTOR = IngestionConfig.OVERVIEW_SELECTOR
+SUBSECTION_SELECTOR = IngestionConfig.SUBSECTION_SELECTOR
+CHUNKER_OUT_DIR = IngestionConfig.CHUNKER_OUT_DIR
+SCRAPER_OUT_DIR = IngestionConfig.SCRAPER_OUT_DIR
 
 
 # -------------------------------------------------------------------------------------------------
@@ -279,7 +279,7 @@ def generate_chunks() -> list[dict[str, str]]:
         # able to split category into main and sub categories here
         for chunk in chunks:
             chunk_id = f"{prefix}_{chunk_counter:04d}"
-            print("chunk_id" + " : " + chunk)
+            # print("chunk_id" + " : " + chunk)
             chunk_counter += 1
             output_data = {
                 "url": url,

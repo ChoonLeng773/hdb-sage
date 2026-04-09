@@ -9,7 +9,7 @@ To be used for scraper and chunker
 """
 
 
-class Config:
+class IngestionConfig:
     """
     Static configuration constants for the ingestion stage.
     """
