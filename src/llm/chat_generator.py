@@ -1,11 +1,12 @@
-import os
+# import os
 import sys
 from pathlib import Path
 
 from langchain_ollama import ChatOllama
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
-from langchain_core.runnables import RunnablePassthrough
+
+# from langchain_core.runnables import RunnablePassthrough
 
 llm_dir = Path(__file__).resolve().parent  # ~/llm
 if str(llm_dir) not in sys.path:
@@ -25,6 +26,7 @@ from vectorstore import *  # for the database functions
 MODEL_NAME = ChatConfig.MODEL_NAME
 MODEL_TEMPERATURE = ChatConfig.MODEL_TEMPERATURE
 SYSTEM_PROMPT = ChatConfig.SYSTEM_PROMPT
+OLLAMA_HOST = ChatConfig.OLLAMA_HOST
 
 
 class QueriesAssistant:
@@ -39,7 +41,11 @@ class QueriesAssistant:
         due to their architecure.
         ministral-3:8b is also a good choice
         """
-        self.llm = ChatOllama(model=model_name, temperature=MODEL_TEMPERATURE)
+        self.llm = ChatOllama(
+            model=model_name,
+            temperature=MODEL_TEMPERATURE,
+            base_url=OLLAMA_HOST,
+        )
         self.template = SYSTEM_PROMPT
         self.prompt = ChatPromptTemplate.from_template(self.template)
         self.output_parser = StrOutputParser()

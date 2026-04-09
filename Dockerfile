@@ -50,4 +50,4 @@ COPY . .
 EXPOSE 11401
 
 # chat.py is the chatting application with the cli
-CMD ["python", "src/chat.py"]
+CMD ["python", "scripts/chat.py"]

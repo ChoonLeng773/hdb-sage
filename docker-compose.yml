@@ -1,0 +1,39 @@
+services:
+  ollama:
+    image: ollama/ollama
+    volumes:
+      - ollama_data:/root/.ollama   # persists models across restarts
+    ports:
+      - "11434:11434"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  ollama-init:
+    image: ollama/ollama
+    depends_on:
+      ollama:
+        condition: service_healthy
+    volumes:
+      - ollama_data:/root/.ollama
+    entrypoint: ["ollama", "pull", "mistral:7b"]
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+
+  app:
+    build: .   
+    image: my-hdb-rag-app
+    stdin_open: true   # equivalent to -i
+    tty: true          # equivalent to -t
+    depends_on:
+      ollama:
+        condition: service_healthy
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+    ports:
+      - "11401:11401"
+
+volumes:
+  ollama_data:   # model persists here, only downloaded once

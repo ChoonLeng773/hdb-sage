@@ -1,3 +1,6 @@
+# Docker artifacts
+*.tar
+
 # Python virtual environment
 venv/
 env/

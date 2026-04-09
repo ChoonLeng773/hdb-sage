@@ -2,12 +2,15 @@
 This file contains the configurations variables which are used within this dircetory
 """
 
+import os
+
 
 class ChatConfig:
     """
     Class containing all of the configuration variables to be imported
     """
 
+    OLLAMA_HOST = os.getenv("OLLAMA_HOST", "http://localhost:11434")
     MODEL_NAME = "mistral:7b"
     MODEL_TEMPERATURE = 0.2  # to adjust according to output quality
     SYSTEM_PROMPT = """
