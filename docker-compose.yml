@@ -6,10 +6,11 @@ services:
     ports:
       - "11434:11434"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:11434"]
+      test: ["CMD", "ollama", "list"] 
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 10s
 
   ollama-init:
     image: ollama/ollama
@@ -30,6 +31,8 @@ services:
     depends_on:
       ollama:
         condition: service_healthy
+      ollama-init:
+        condition: service_completed_successfully 
     environment:
       - OLLAMA_HOST=http://ollama:11434
     ports:

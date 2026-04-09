@@ -50,4 +50,6 @@ COPY . .
 EXPOSE 11401
 
 # chat.py is the chatting application with the cli
-CMD ["python", "scripts/chat.py"]
+COPY entrypoint.sh .
+RUN chmod +x entrypoint.sh
+CMD ["./entrypoint.sh"]
