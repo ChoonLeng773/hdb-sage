@@ -279,7 +279,7 @@ def generate_chunks() -> list[dict[str, str]]:
         # able to split category into main and sub categories here
         for chunk in chunks:
             chunk_id = f"{prefix}_{chunk_counter:04d}"
-            print("chunk_id" + " : " + chunk)
+            # print("chunk_id" + " : " + chunk)
             chunk_counter += 1
             output_data = {
                 "url": url,
